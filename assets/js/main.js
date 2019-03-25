@@ -1,3 +1,4 @@
+const body = document.querySelector("body");
 const jsLogin = document.querySelector(".jsLogin");
 
 const NICKNAME = "nickname";
@@ -37,7 +38,7 @@ function hideLogin() {
   }
 }
 
-if (nickname) {
+if (nickname !== null) {
   logIn(nickname);
 } else {
   if (jsLogin) {
@@ -45,9 +46,11 @@ if (nickname) {
   }
 }
 
-if (socket) {
-  const onNewUser = data => {
-    console.log(data);
+if (socket !== null) {
+  const onNewUser = ({ nickname }) => {
+    const notification = document.createElement("div");
+    notification.innerHTML = `<div class="notification">${nickname} just joined!</div>`;
+    body.append(notification);
   };
   socket.on(socketEvents.newUser, onNewUser);
 }

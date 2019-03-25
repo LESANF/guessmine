@@ -28,4 +28,4 @@ const server = app.listen(process.env.PORT, handleListening);
 
 const io = listen(server);
 
-io.on("connection", socketController);
+io.on("connection", socket => socketController(io)(socket));
