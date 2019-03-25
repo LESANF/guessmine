@@ -7,6 +7,7 @@ import logger from "morgan";
 import bodyParser from "body-parser";
 import cookieParser from "cookie-parser";
 import { localsMiddleware } from "./middlewares";
+import appRouter from "./router";
 
 const PORT = process.env.PORT || 4000;
 
@@ -19,7 +20,7 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cookieParser());
 app.use(localsMiddleware);
-app.get("/", (_, res) => res.render("home"));
+app.use("/", appRouter);
 
 const handleListening = () =>
   console.log(`✅  Server running on http://localhost:${PORT}`);

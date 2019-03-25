@@ -1,12 +1,7 @@
-html(lang="en")
-    head
-        meta(charset="UTF-8")
-        meta(name="viewport", content="width=device-width, initial-scale=1.0")
-        meta(http-equiv="X-UA-Compatible", content="ie=edge")
-        link(rel="stylesheet", href="css/styles.css")
-        title #{siteName}
-    body
-        if user
-            include ./partials/loggedIn
-        else 
-            include ./partials/loggedOut
+extends layouts/layout
+
+block content
+    if user
+        include ./partials/app
+    else 
+        include ./partials/auth
