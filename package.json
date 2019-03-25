@@ -33,7 +33,7 @@
     "socket.io": "^2.2.0"
   },
   "scripts": {
-    "dev": "nodemon --exec babel-node src/app",
+    "dev": "nodemon --config nodemon.json --exec babel-node src/app",
     "assets": "gulp"
   }
 }

@@ -6,6 +6,7 @@ import logger from "morgan";
 import bodyParser from "body-parser";
 import cookieParser from "cookie-parser";
 import { localsMiddleware } from "./middlewares";
+import socketController from "./socketController";
 
 const PORT = process.env.PORT || 4000;
 
@@ -26,3 +27,5 @@ const handleListening = () =>
 const server = app.listen(process.env.PORT, handleListening);
 
 const io = listen(server);
+
+io.on("connection", socketController);
