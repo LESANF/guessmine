@@ -8,13 +8,16 @@
   const LOGGED_OUT_CLASS = "loggedOut";
   const LOGGED_IN_CLASS = "loggedIn";
 
+  const KIND_LEFT = "left";
+  const KIND_JOINED = "joined";
+
   let nickname = localStorage.getItem(NICKNAME) || null;
   let socket = null;
 
   function logIn(nickname) {
     socket = io("/");
     socket.emit(socketEvents.login, { nickname });
-    initSocketSubs();
+    initSockets();
     body.classList.remove(LOGGED_OUT_CLASS);
     body.classList.add(LOGGED_IN_CLASS);
   }
@@ -45,11 +48,21 @@
     }
   }
 
+  function fireNotification(content, kind) {
+    const notification = document.createElement("div");
+    notification.className = "notification";
+    if (kind === KIND_JOINED) {
+      notification.style.backgroundColor = "#5856d6";
+    } else if (kind === KIND_LEFT) {
+      notification.style.backgroundColor = "rgb(255, 204, 0)";
+    }
+    notification.innerText = content;
+    body.append(notification);
+  }
+
   function subscribeToNewUser() {
     const onNewUser = ({ nickname }) => {
-      const notification = document.createElement("div");
-      notification.innerHTML = `<div class="notification">${nickname} just joined!</div>`;
-      body.append(notification);
+      fireNotification(`${nickname} just joined!`, KIND_JOINED);
     };
     socket.on(socketEvents.newUser, onNewUser);
   }
@@ -80,9 +93,17 @@
     socket.on(socketEvents.receiveMessage, onNewMessage);
   }
 
-  function initSocketSubs() {
+  function subscribeToDisconnect() {
+    const onDisconnected = ({ nickname }) => {
+      fireNotification(`${nickname} just left!`, KIND_LEFT);
+    };
+    socket.on(socketEvents.disconnected, onDisconnected);
+  }
+
+  function initSockets() {
     subscribeToNewUser();
     subscribeToNewMessage();
+    subscribeToDisconnect();
   }
 
   if (nickname !== null) {

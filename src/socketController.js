@@ -15,6 +15,10 @@ const socketController = io => socket => {
       nickname: socket.nickname
     });
   });
+
+  socket.on(events.disconnect, () =>
+    io.sockets.emit(events.disconnected, { nickname: socket.nickname })
+  );
 };
 
 export default socketController;
