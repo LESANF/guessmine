@@ -3,7 +3,7 @@ import sass from "gulp-sass";
 import uglify from "gulp-uglify";
 import del from "del";
 import autoprefixer from "gulp-autoprefixer";
-import images from "gulp-image";
+import minify from "gulp-minify";
 import minifyCSS from "gulp-csso";
 import babel from "gulp-babel";
 
@@ -15,7 +15,8 @@ const paths = {
     dest: "src/public/js/"
   },
   scss: {
-    src: "assets/scss/**/*.scss",
+    watch: "assets/scss/**/*.scss",
+    src: "assets/scss/styles.scss",
     dest: "src/public/css/"
   }
 };
@@ -41,7 +42,7 @@ function styles() {
 
 function watchFiles() {
   gulp.watch(paths.js.src, scripts);
-  gulp.watch(paths.scss.src, styles);
+  gulp.watch(paths.scss.watch, styles);
 }
 
 const dev = gulp.series(clean, scripts, styles, watchFiles);

@@ -7,9 +7,16 @@ html(lang="en")
         link(rel="stylesheet", href="/css/styles.css")
         title Guess Mine
     body
-        form.loginBox.jsLogin.jsHidden
+        form.loginBox.jsLogin
             h4.loginBox__title Log in
             input(type="text", placeholder="Username")
+        .gameContainer
+            .main
+                .canvas
+            .chat
+                ul.chatMessages
+                form.sendMessage
+                    input.sendMessage__input(placeholder="Write a message")
         script.
             let socketEvents = !{events}
         script(src="/socket.io/socket.io.js")

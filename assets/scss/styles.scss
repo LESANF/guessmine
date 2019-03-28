@@ -1,6 +1,13 @@
+@import url("https://fonts.googleapis.com/css?family=Lato:400,700");
 @import "_variables";
 @import "_reset";
-@import url("https://fonts.googleapis.com/css?family=Lato:400,700");
+@import "notifications";
+@import "loginBox";
+@import "gameContainer";
+
+* {
+  box-sizing: border-box;
+}
 
 html {
   height: 100%;
@@ -14,78 +21,16 @@ body {
   justify-content: center;
   align-items: center;
   min-height: 100%;
-}
-
-.jsHidden {
-  display: none;
-}
-
-input {
-  padding: 10px;
-  border: 0;
-  background-color: $greyColor;
-  box-shadow: 0 2px 4px rgba(50, 50, 93, 0.1), 0 0 0 1px rgba(42, 47, 69, 0.16);
-  border-radius: 5px;
-  font-size: 14px;
-  &:focus {
-    outline: none;
+  .loginBox,
+  .gameContainer {
+    display: none;
   }
-}
-
-.loginBox {
-  box-shadow: $boxShadow;
-  background-color: white;
-  padding: 40px;
-  border-radius: 5px;
-  .loginBox__title {
-    text-align: center;
-    font-size: 26px;
-    margin-bottom: 20px;
+  &.loggedOut {
+    .loginBox {
+      display: block;
+    }
   }
-  input {
-    width: 200px;
+  &.loggedIn .gameContainer {
+    display: flex;
   }
-}
-
-@keyframes notification {
-  0% {
-    transform: translateY(80px);
-    opacity: 0;
-  }
-  50% {
-    transform: translateY(-90px);
-    opacity: 1;
-  }
-  100% {
-    transform: translateY(-70px);
-    opacity: 1;
-  }
-}
-
-@keyframes dissapear {
-  from {
-    opacity: 1;
-  }
-  to {
-    opacity: 0;
-  }
-}
-
-.notification {
-  opacity: 0;
-  bottom: -100px;
-  position: absolute;
-  bottom: 0px;
-  left: 50px;
-  box-shadow: 0 13px 27px -5px rgba(50, 50, 93, 0.25),
-    0 8px 16px -8px rgba(0, 0, 0, 0.3), 0 -6px 16px -6px rgba(0, 0, 0, 0.025);
-  background-color: white;
-  padding: 20px 50px;
-  text-align: center;
-  border-radius: 50px;
-  animation: notification 0.5s ease-out forwards,
-    dissapear 0.5s ease-in forwards;
-  animation-delay: 0.5s, 2s;
-  color: white;
-  background-color: $purple;
 }
