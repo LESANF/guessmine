@@ -102,6 +102,30 @@
     socket.on(socketEvents.disconnected, onDisconnected);
   }
 
+  function paintPlayers({ sockets }) {
+    const players = document.getElementById("players");
+    if (players) {
+      players.innerHTML = "";
+      sockets.forEach(player => {
+        const div = document.createElement("div");
+        div.innerHTML = `
+        <span class="nickname">${player.nickname}:</span>
+        <span class="points">${player.points}</span>
+      `;
+        div.className = "player";
+        players.appendChild(div);
+      });
+    }
+  }
+
+  function ping() {
+    socket.emit(socketEvents.ping);
+  }
+
+  function subscribeToPong() {
+    socket.on(socketEvents.pong, paintPlayers);
+  }
+
   function initSockets() {
     subscribeToNewUser();
     subscribeToNewMessage();
@@ -109,6 +133,8 @@
     subscribeToMoved();
     subscribeToPainted();
     subscribeToFilled();
+    subscribeToPong();
+    ping();
   }
 
   if (nickname !== null) {
