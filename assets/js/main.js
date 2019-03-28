@@ -125,6 +125,8 @@
   const context = canvas.getContext("2d");
   const colors = document.getElementsByClassName("color");
 
+  const SELECTED_COLOR = "selectedColor";
+
   canvas.width = 700;
   canvas.height = 700;
 
@@ -187,6 +189,11 @@
 
   function onColorClick(e) {
     const style = e.target.style;
+    const selected = document.querySelector(`.${SELECTED_COLOR}`);
+    if (selected !== null) {
+      selected.classList.remove(SELECTED_COLOR);
+    }
+    e.target.classList.add(SELECTED_COLOR);
     context.strokeStyle = style.backgroundColor;
   }
 

@@ -1,7 +1,7 @@
 .gameContainer {
-  padding: 0px 50px;
-  justify-content: space-around;
-  width: 100%;
+  width: 80%;
+  margin: 0 auto;
+  justify-content: center;
   .canvas,
   .chat {
     background-color: white;
@@ -10,6 +10,7 @@
     box-shadow: 0 3px 36px rgba(23, 55, 87, 0.1), 0 5px 15px rgba(0, 0, 0, 0.07);
   }
   .main {
+    margin-right: 200px;
     #canvas {
       width: 700px;
       height: 700px;
@@ -18,13 +19,32 @@
       margin-top: 25px;
       display: flex;
       align-items: center;
-      .color {
-        height: 50px;
-        width: 50px;
-        cursor: pointer;
-        box-shadow: 0 4px 6px rgba(50, 50, 93, 0.11),
-          0 1px 3px rgba(0, 0, 0, 0.08);
-        border-radius: 25px;
+      .colors {
+        display: flex;
+        &:hover .color {
+          opacity: 0.95;
+          transform: translateX(-3px);
+        }
+        .color {
+          height: 50px;
+          width: 50px;
+          cursor: pointer;
+          box-shadow: 0 4px 6px rgba(50, 50, 93, 0.11),
+            0 1px 3px rgba(0, 0, 0, 0.08);
+          border-radius: 25px;
+          transition: opacity 0.1s linear, scale 0.1s linear,
+            transform 0.1s linear;
+          &:hover {
+            opacity: 1;
+            transform: scale(1.1);
+            & ~ .color {
+              transform: translateX(3px);
+            }
+          }
+          &.selectedColor {
+            box-shadow: none;
+          }
+        }
       }
       button {
         margin-left: 25px;
@@ -48,9 +68,9 @@
     }
   }
   .chat {
-    width: 25%;
+    width: 20%;
     .chatMessages {
-      height: 90%;
+      height: 95%;
       width: 100%;
       padding: 20px 10px;
       overflow: scroll;
@@ -73,8 +93,8 @@
       flex-direction: column;
       align-items: center;
       input {
-        height: 80px;
-        width: 110%;
+        height: 50px;
+        width: 120%;
         padding: 0px 25px;
         box-shadow: 0 6px 12px -2px rgba(50, 50, 93, 0.25),
           0 3px 7px -3px rgba(0, 0, 0, 0.3);
