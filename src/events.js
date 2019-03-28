@@ -8,7 +8,9 @@ const events = {
   painting: "painting",
   painted: "painted",
   moving: "moving",
-  moved: "moved"
+  moved: "moved",
+  filling: "filling",
+  filled: "filled"
 };
 
 export default events;

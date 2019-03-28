@@ -108,6 +108,7 @@
     subscribeToDisconnect();
     subscribeToMoved();
     subscribeToPainted();
+    subscribeToFilled();
   }
 
   if (nickname !== null) {
@@ -192,12 +193,17 @@
     }
   }
 
+  function fillCanvas(color) {
+    context.closePath();
+    context.beginPath();
+    context.fillStyle = color;
+    context.fillRect(0, 0, canvas.width, canvas.height);
+  }
+
   function onCanvasClick() {
     if (filling) {
-      context.closePath();
-      context.beginPath();
-      context.fillStyle = context.strokeStyle;
-      context.fillRect(0, 0, canvas.width, canvas.height);
+      fillCanvas(context.strokeStyle);
+      socket.emit(socketEvents.filling, { color: context.strokeStyle });
     }
   }
 
@@ -234,5 +240,10 @@
   function subscribeToPainted() {
     const onPainted = ({ x, y }) => strokePath(x, y);
     socket.on(socketEvents.painted, onPainted);
+  }
+
+  function subscribeToFilled() {
+    const onFilled = ({ color }) => fillCanvas(color);
+    socket.on(socketEvents.filled, onFilled);
   }
 })();

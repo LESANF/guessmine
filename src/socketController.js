@@ -26,6 +26,9 @@ const socketController = io => socket => {
   socket.on(events.painting, ({ x, y }) =>
     socket.broadcast.emit(events.painted, { x, y })
   );
+  socket.on(events.filling, ({ color }) =>
+    socket.broadcast.emit(events.filled, { color })
+  );
 };
 
 export default socketController;
