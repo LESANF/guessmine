@@ -1,7 +1,8 @@
 const events = {
   login: "login",
   newUser: "newUser",
-  sendMessage: "sendMessage"
+  sendMessage: "sendMessage",
+  receiveMessage: "receiveMessage"
 };
 
 export default events;
