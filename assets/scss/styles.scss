@@ -9,6 +9,10 @@
   box-sizing: border-box;
 }
 
+button:focus {
+  outline: none;
+}
+
 html {
   height: 100%;
 }

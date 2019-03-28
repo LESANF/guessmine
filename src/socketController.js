@@ -17,7 +17,7 @@ const socketController = io => socket => {
   });
 
   socket.on(events.disconnect, () =>
-    io.sockets.emit(events.disconnected, { nickname: socket.nickname })
+    socket.broadcast.emit(events.disconnected, { nickname: socket.nickname })
   );
 };
 

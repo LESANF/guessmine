@@ -117,4 +117,91 @@
   if (sendMessage) {
     sendMessage.addEventListener("submit", onMessageSubmit);
   }
+
+  // Painting
+
+  const modeBtn = document.getElementById("paintMode");
+  const canvas = document.getElementById("canvas");
+  const context = canvas.getContext("2d");
+  const colors = document.getElementsByClassName("color");
+
+  canvas.width = 700;
+  canvas.height = 700;
+
+  let painting = false,
+    filling = false,
+    x,
+    y;
+
+  context.lineWidth = 2.5;
+  context.fillStyle = "#ffffff";
+  context.fillRect(0, 0, canvas.width, canvas.height);
+  context.strokeStyle = "#000000";
+
+  function onMouseMove(event) {
+    x = event.offsetX;
+    y = event.offsetY;
+    if (!filling) {
+      if (!painting) {
+        context.beginPath();
+        context.moveTo(x, y);
+      } else {
+        context.lineTo(x, y);
+        context.stroke();
+      }
+    }
+  }
+
+  function startPainting() {
+    painting = true;
+  }
+  function stopPainting() {
+    painting = false;
+  }
+
+  function startFilling() {
+    filling = true;
+  }
+  function stopFilling() {
+    filling = false;
+  }
+
+  function onModeClick() {
+    if (filling === true) {
+      modeBtn.innerText = "Fill";
+      stopFilling();
+    } else {
+      modeBtn.innerText = "Paint";
+      startFilling();
+    }
+  }
+
+  function onCanvasClick() {
+    if (filling) {
+      context.closePath();
+      context.beginPath();
+      context.fillStyle = context.strokeStyle;
+      context.fillRect(0, 0, canvas.width, canvas.height);
+    }
+  }
+
+  function onColorClick(e) {
+    const style = e.target.style;
+    context.strokeStyle = style.backgroundColor;
+  }
+
+  Array.from(colors).forEach(color =>
+    color.addEventListener("click", onColorClick, false)
+  );
+
+  if (modeBtn) {
+    modeBtn.addEventListener("click", onModeClick);
+  }
+  if (canvas) {
+    canvas.addEventListener("mousemove", onMouseMove, false);
+    canvas.addEventListener("mousedown", startPainting, false);
+    canvas.addEventListener("mouseup", stopPainting, false);
+    canvas.addEventListener("mouseleave", stopPainting, false);
+    canvas.addEventListener("click", onCanvasClick, false);
+  }
 })();
