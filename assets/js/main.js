@@ -57,6 +57,10 @@
 
   function onMessageSubmit(e) {
     e.preventDefault();
+    const input = sendMessage.querySelector("input");
+    const message = input.value;
+    input.value = "";
+    socket.emit(socketEvents.sendMessage, { message });
   }
 
   if (nickname !== null) {
