@@ -43,7 +43,8 @@
 
   function hideLogin() {
     if (jsLogin) {
-      jsLogin.classList.add(HIDDEN_CLASSNAME);
+      body.classList.remove(LOGGED_OUT_CLASS);
+      body.classList.add(LOGGED_IN_CLASS);
       jsLogin.removeEventListener("submit", handleLoginSubmit);
     }
   }
@@ -74,7 +75,8 @@
       ${text}
     `;
     li.className = `chatMessage ${from ? "" : "mine"}`;
-    chatMessages.prepend(li);
+    chatMessages.append(li);
+    chatMessages.scrollTop = chatMessages.scrollHeight;
   }
 
   function onMessageSubmit(e) {
@@ -104,6 +106,8 @@
     subscribeToNewUser();
     subscribeToNewMessage();
     subscribeToDisconnect();
+    subscribeToMoved();
+    subscribeToPainted();
   }
 
   if (nickname !== null) {
@@ -140,16 +144,26 @@
   context.fillRect(0, 0, canvas.width, canvas.height);
   context.strokeStyle = "#000000";
 
+  function movePath(x, y) {
+    context.beginPath();
+    context.moveTo(x, y);
+  }
+
+  function strokePath(x, y) {
+    context.lineTo(x, y);
+    context.stroke();
+  }
+
   function onMouseMove(event) {
     x = event.offsetX;
     y = event.offsetY;
     if (!filling) {
       if (!painting) {
-        context.beginPath();
-        context.moveTo(x, y);
+        movePath(x, y);
+        socket.emit(socketEvents.moving, { x, y });
       } else {
-        context.lineTo(x, y);
-        context.stroke();
+        strokePath(x, y);
+        socket.emit(socketEvents.painting, { x, y });
       }
     }
   }
@@ -210,5 +224,15 @@
     canvas.addEventListener("mouseup", stopPainting, false);
     canvas.addEventListener("mouseleave", stopPainting, false);
     canvas.addEventListener("click", onCanvasClick, false);
+  }
+
+  function subscribeToMoved() {
+    const onMoved = ({ x, y }) => movePath(x, y);
+    socket.on(socketEvents.moved, onMoved);
+  }
+
+  function subscribeToPainted() {
+    const onPainted = ({ x, y }) => strokePath(x, y);
+    socket.on(socketEvents.painted, onPainted);
   }
 })();

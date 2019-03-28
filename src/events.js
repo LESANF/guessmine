@@ -4,7 +4,11 @@ const events = {
   sendMessage: "sendMessage",
   receiveMessage: "receiveMessage",
   disconnect: "disconnect",
-  disconnected: "disconnected"
+  disconnected: "disconnected",
+  painting: "painting",
+  painted: "painted",
+  moving: "moving",
+  moved: "moved"
 };
 
 export default events;

@@ -19,6 +19,13 @@ const socketController = io => socket => {
   socket.on(events.disconnect, () =>
     socket.broadcast.emit(events.disconnected, { nickname: socket.nickname })
   );
+
+  socket.on(events.moving, ({ x, y }) =>
+    socket.broadcast.emit(events.moved, { x, y })
+  );
+  socket.on(events.painting, ({ x, y }) =>
+    socket.broadcast.emit(events.painted, { x, y })
+  );
 };
 
 export default socketController;
