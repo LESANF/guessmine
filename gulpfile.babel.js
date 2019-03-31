@@ -11,7 +11,7 @@ sass.compiler = require("node-sass");
 
 const paths = {
   js: {
-    src: "assets/js/main.js",
+    src: "assets/js/**/*.js",
     dest: "src/public/js/"
   },
   scss: {

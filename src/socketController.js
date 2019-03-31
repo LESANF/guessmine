@@ -1,13 +1,22 @@
 import events from "./events";
 
 let sockets = [];
+let inProgress = false;
 
 const socketController = io => socket => {
+  const startGame = () => {
+    inProgress = true;
+    io.emit(events.starting);
+  };
+
   socket.on(events.login, ({ nickname }) => {
     socket.nickname = nickname;
     sockets.push({ id: socket.id, nickname, points: 0 });
     socket.broadcast.emit(events.newUser, { nickname });
     socket.broadcast.emit(events.pong, { sockets });
+    if (sockets.length > 1 && inProgress === false) {
+      console.log("will start game");
+    }
   });
 
   socket.on(events.sendMessage, ({ message }) => {
@@ -38,5 +47,3 @@ const socketController = io => socket => {
 };
 
 export default socketController;
-
-setInterval(() => console.log(sockets), 5000);

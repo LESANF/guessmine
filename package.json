@@ -10,6 +10,10 @@
     "@babel/node": "^7.2.2",
     "@babel/preset-env": "^7.4.2",
     "del": "^4.0.0",
+    "eslint": "^5.16.0",
+    "eslint-config-airbnb-base": "^13.1.0",
+    "eslint-config-prettier": "^4.1.0",
+    "eslint-plugin-prettier": "^3.0.1",
     "gulp": "^4.0.0",
     "gulp-autoprefixer": "^6.0.0",
     "gulp-babel": "^8.0.0",
@@ -21,6 +25,7 @@
     "gulp-uglify": "^3.0.2",
     "node-sass": "^4.11.0",
     "nodemon": "^1.18.10",
+    "prettier": "^1.16.4",
     "uglify": "^0.1.5"
   },
   "dependencies": {
@@ -34,7 +39,7 @@
     "socket.io": "^2.2.0"
   },
   "scripts": {
-    "dev": "nodemon --config nodemon.json --exec babel-node src/app",
-    "assets": "gulp"
+    "dev:server": "nodemon --config nodemon.json --exec babel-node src/app",
+    "dev:assets": "gulp"
   }
 }

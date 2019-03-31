@@ -12,7 +12,8 @@ const events = {
   filling: "filling",
   filled: "filled",
   ping: "aPing",
-  pong: "aPong"
+  pong: "aPong",
+  starting: "starting"
 };
 
 export default events;
