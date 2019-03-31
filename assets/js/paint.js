@@ -24,9 +24,12 @@ function movePath(x, y) {
   context.moveTo(x, y);
 }
 
-function strokePath(x, y) {
+function strokePath(x, y, eventColor) {
+  let currentStroke = context.strokeStyle;
+  context.strokeStyle = eventColor;
   context.lineTo(x, y);
   context.stroke();
+  context.strokeStyle = currentStroke;
 }
 
 function onMouseMove(event) {
@@ -40,7 +43,11 @@ function onMouseMove(event) {
     } else {
       strokePath(x, y);
       // eslint-disable-next-line no-undef
-      getSocket().emit(socketEvents.painting, { x, y });
+      getSocket().emit(socketEvents.painting, {
+        x,
+        y,
+        color: context.strokeStyle
+      });
     }
   }
 }
@@ -116,7 +123,7 @@ function subscribeToMoved() {
 }
 
 function subscribeToPainted() {
-  const onPainted = ({ x, y }) => strokePath(x, y);
+  const onPainted = ({ x, y, color }) => strokePath(x, y, color);
   // eslint-disable-next-line no-undef
   getSocket().on(socketEvents.painted, onPainted);
 }

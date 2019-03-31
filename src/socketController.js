@@ -35,8 +35,8 @@ const socketController = io => socket => {
   socket.on(events.moving, ({ x, y }) =>
     socket.broadcast.emit(events.moved, { x, y })
   );
-  socket.on(events.painting, ({ x, y }) =>
-    socket.broadcast.emit(events.painted, { x, y })
+  socket.on(events.painting, ({ x, y, color }) =>
+    socket.broadcast.emit(events.painted, { x, y, color })
   );
   socket.on(events.filling, ({ color }) =>
     socket.broadcast.emit(events.filled, { color })
