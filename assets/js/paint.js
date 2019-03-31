@@ -1,3 +1,4 @@
+import { getSocket } from "./sockets";
 const modeBtn = document.getElementById("paintMode");
 const canvas = document.getElementById("canvas");
 const context = canvas.getContext("2d");
@@ -34,10 +35,12 @@ function onMouseMove(event) {
   if (!filling) {
     if (!painting) {
       movePath(x, y);
-      socket.emit(socketEvents.moving, { x, y });
+      // eslint-disable-next-line no-undef
+      getSocket().emit(socketEvents.moving, { x, y });
     } else {
       strokePath(x, y);
-      socket.emit(socketEvents.painting, { x, y });
+      // eslint-disable-next-line no-undef
+      getSocket().emit(socketEvents.painting, { x, y });
     }
   }
 }
@@ -76,7 +79,8 @@ function fillCanvas(color) {
 function onCanvasClick() {
   if (filling) {
     fillCanvas(context.strokeStyle);
-    socket.emit(socketEvents.filling, { color: context.strokeStyle });
+    // eslint-disable-next-line no-undef
+    getSocket().emit(socketEvents.filling, { color: context.strokeStyle });
   }
 }
 
@@ -107,15 +111,24 @@ if (canvas) {
 
 function subscribeToMoved() {
   const onMoved = ({ x, y }) => movePath(x, y);
-  socket.on(socketEvents.moved, onMoved);
+  // eslint-disable-next-line no-undef
+  getSocket().on(socketEvents.moved, onMoved);
 }
 
 function subscribeToPainted() {
   const onPainted = ({ x, y }) => strokePath(x, y);
-  socket.on(socketEvents.painted, onPainted);
+  // eslint-disable-next-line no-undef
+  getSocket().on(socketEvents.painted, onPainted);
 }
 
 function subscribeToFilled() {
   const onFilled = ({ color }) => fillCanvas(color);
-  socket.on(socketEvents.filled, onFilled);
+  // eslint-disable-next-line no-undef
+  getSocket().on(socketEvents.filled, onFilled);
 }
+
+export default {
+  subscribeToMoved,
+  subscribeToPainted,
+  subscribeToFilled
+};

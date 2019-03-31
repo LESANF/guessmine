@@ -1,3 +1,5 @@
+import { getSocket } from "./sockets";
+
 const body = document.querySelector("body");
 
 const KIND_LEFT = "left";
@@ -19,12 +21,19 @@ function subscribeToNewUser() {
   const onNewUser = ({ nickname }) => {
     fireNotification(`${nickname} just joined!`, KIND_JOINED);
   };
-  socket.on(socketEvents.newUser, onNewUser);
+  // eslint-disable-next-line no-undef
+  getSocket().on(socketEvents.newUser, onNewUser);
 }
 
 function subscribeToDisconnect() {
   const onDisconnected = ({ nickname }) => {
     fireNotification(`${nickname} just left!`, KIND_LEFT);
   };
-  socket.on(socketEvents.disconnected, onDisconnected);
+  // eslint-disable-next-line no-undef
+  getSocket().on(socketEvents.disconnected, onDisconnected);
 }
+
+export default {
+  subscribeToNewUser,
+  subscribeToDisconnect
+};

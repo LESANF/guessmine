@@ -1,19 +1,19 @@
+import sockets from "./sockets";
 const body = document.querySelector("body");
-const jsLogin = document.querySelector(".jsLogin");
-const sendMessage = document.querySelector(".sendMessage");
-
-const NICKNAME = "nickname";
 const LOGGED_OUT_CLASS = "loggedOut";
 const LOGGED_IN_CLASS = "loggedIn";
 
+const jsLogin = document.querySelector(".jsLogin");
+const NICKNAME = "nickname";
+
 let nickname = localStorage.getItem(NICKNAME) || null;
 
-let socket = null;
-
 function logIn(nickname) {
-  socket = io("/");
-  socket.emit(socketEvents.login, { nickname });
-  initSockets();
+  // eslint-disable-next-line no-undef
+  sockets.updateSocket(io("/"));
+  // eslint-disable-next-line no-undef
+  sockets.getSocket().emit(socketEvents.login, { nickname });
+  sockets.initSockets();
   body.classList.remove(LOGGED_OUT_CLASS);
   body.classList.add(LOGGED_IN_CLASS);
 }
@@ -45,49 +45,10 @@ function hideLogin() {
   }
 }
 
-function paintPlayers({ sockets }) {
-  const players = document.getElementById("players");
-  if (players) {
-    players.innerHTML = "";
-    sockets.forEach(player => {
-      const div = document.createElement("div");
-      div.innerHTML = `
-        <span class="nickname">${player.nickname}:</span>
-        <span class="points">${player.points}</span>
-      `;
-      div.className = "player";
-      players.appendChild(div);
-    });
-  }
-}
-
-function ping() {
-  socket.emit(socketEvents.ping);
-}
-
-function subscribeToPong() {
-  socket.on(socketEvents.pong, paintPlayers);
-}
-
-function initSockets() {
-  subscribeToNewUser();
-  subscribeToNewMessage();
-  subscribeToDisconnect();
-  subscribeToMoved();
-  subscribeToPainted();
-  subscribeToFilled();
-  subscribeToPong();
-  ping();
-}
-
 if (nickname !== null) {
   logIn(nickname);
 } else {
   if (jsLogin) {
     showLogin();
   }
-}
-
-if (sendMessage) {
-  sendMessage.addEventListener("submit", onMessageSubmit);
 }

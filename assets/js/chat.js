@@ -1,3 +1,6 @@
+import { getSocket } from "./sockets";
+
+const sendMessage = document.querySelector(".sendMessage");
 const chatMessages = document.querySelector(".chatMessages");
 
 function addMessage(text, from) {
@@ -17,11 +20,49 @@ function onMessageSubmit(e) {
   input.className = "chatMessage";
   const message = input.value;
   input.value = "";
-  socket.emit(socketEvents.sendMessage, { message });
+  // eslint-disable-next-line no-undef
+  getSocket().emit(socketEvents.sendMessage, { message });
   addMessage(message, null);
 }
 
 function subscribeToNewMessage() {
   const onNewMessage = ({ message, nickname }) => addMessage(message, nickname);
-  socket.on(socketEvents.receiveMessage, onNewMessage);
+  // eslint-disable-next-line no-undef
+  getSocket().on(socketEvents.receiveMessage, onNewMessage);
 }
+
+function paintPlayers({ sockets }) {
+  const players = document.getElementById("players");
+  if (players) {
+    players.innerHTML = "";
+    sockets.forEach(player => {
+      const div = document.createElement("div");
+      div.innerHTML = `
+        <span class="nickname">${player.nickname}:</span>
+        <span class="points">${player.points}</span>
+      `;
+      div.className = "player";
+      players.appendChild(div);
+    });
+  }
+}
+
+function ping() {
+  // eslint-disable-next-line no-undef
+  getSocket().emit(socketEvents.ping);
+}
+
+function subscribeToPong() {
+  // eslint-disable-next-line no-undef
+  getSocket().on(socketEvents.pong, paintPlayers);
+}
+
+if (sendMessage) {
+  sendMessage.addEventListener("submit", onMessageSubmit);
+}
+
+export default {
+  ping,
+  subscribeToPong,
+  subscribeToNewMessage
+};

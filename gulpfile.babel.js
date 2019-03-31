@@ -3,15 +3,16 @@ import sass from "gulp-sass";
 import uglify from "gulp-uglify";
 import del from "del";
 import autoprefixer from "gulp-autoprefixer";
-import minify from "gulp-minify";
+import bro from "gulp-bro";
 import minifyCSS from "gulp-csso";
-import babel from "gulp-babel";
+import babelify from "babelify";
 
 sass.compiler = require("node-sass");
 
 const paths = {
   js: {
-    src: "assets/js/**/*.js",
+    watch: "assets/js/**/*.js",
+    src: "assets/js/main.js",
     dest: "src/public/js/"
   },
   scss: {
@@ -26,7 +27,16 @@ export const clean = () => del(["src/public"]);
 function scripts() {
   return gulp
     .src(paths.js.src)
-    .pipe(babel())
+    .pipe(
+      bro({
+        transform: [
+          babelify.configure({
+            presets: ["@babel/preset-env"],
+            plugins: ["babel-plugin-transform-es2015-modules-commonjs"]
+          })
+        ]
+      })
+    )
     .pipe(uglify())
     .pipe(gulp.dest(paths.js.dest));
 }
@@ -41,7 +51,7 @@ function styles() {
 }
 
 function watchFiles() {
-  gulp.watch(paths.js.src, scripts);
+  gulp.watch(paths.js.watch, scripts);
   gulp.watch(paths.scss.watch, styles);
 }
 
