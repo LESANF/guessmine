@@ -1,6 +1,6 @@
 import { getSocket } from "./sockets";
 import { enableCanvas, disableCanvas } from "./paint";
-import { lockChat } from "./chat";
+import { lockChat, unlockChat } from "./chat";
 
 const gameNotifications = document.getElementById("gameNotifications");
 const status = gameNotifications.querySelector(".status");
@@ -27,6 +27,7 @@ function startClock() {
 function stopClock() {
   clearInterval(clockInterval);
   clockInterval = null;
+  clock.innerText = "";
 }
 
 function updateNotifications(text) {
@@ -80,6 +81,7 @@ function subscribeToGameFinished() {
   const onGameFinished = () => {
     stopClock();
     updateNotifications("Game is finished");
+    unlockChat();
   };
   // eslint-disable-next-line no-undef
   getSocket().on(socketEvents.gameFinished, onGameFinished);

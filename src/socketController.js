@@ -1,6 +1,8 @@
 import events from "./events";
 import { getWord } from "./words";
 
+const POINTS = 10;
+
 let sockets = [];
 let inProgress = false;
 let word, leader;
@@ -20,6 +22,19 @@ const socketController = io => socket => {
     }, 5000);
   };
 
+  const registerWin = () => {
+    sockets = sockets.map(aSocket => {
+      if (aSocket.id === socket.id) {
+        return { ...aSocket, points: aSocket.points + POINTS };
+      } else {
+        return aSocket;
+      }
+    });
+    io.emit(events.pong, { sockets, word, inProgress });
+    io.emit(events.gameFinished);
+    startGame();
+  };
+
   socket.on(events.login, ({ nickname }) => {
     socket.nickname = nickname;
     sockets.push({ id: socket.id, nickname, points: 0 });
@@ -31,10 +46,14 @@ const socketController = io => socket => {
   });
 
   socket.on(events.sendMessage, ({ message }) => {
-    socket.broadcast.emit(events.receiveMessage, {
-      message,
-      nickname: socket.nickname
-    });
+    if (message === word) {
+      return registerWin();
+    } else {
+      return socket.broadcast.emit(events.receiveMessage, {
+        message,
+        nickname: socket.nickname
+      });
+    }
   });
 
   socket.on(events.disconnect, () => {
@@ -57,8 +76,11 @@ const socketController = io => socket => {
   });
   socket.on(events.gameFinished, () => {
     io.emit(events.gameFinished);
+    inProgress = false;
     setTimeout(() => startGame(), 3000);
   });
 };
+
+setInterval(() => console.log(sockets), 2000);
 
 export default socketController;
