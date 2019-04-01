@@ -1,4 +1,5 @@
 import { getSocket } from "./sockets";
+import { enableCanvas, disableCanvas } from "./paint";
 
 const gameNotifications = document.getElementById("gameNotifications");
 
@@ -24,14 +25,19 @@ function subscribeToGameStarting() {
 }
 
 function subscribeToGameStarted() {
-  const onGameStarted = () => updateNotifications("Game stared!");
+  const onGameStarted = () => {
+    updateNotifications("Game stared!");
+    disableCanvas();
+  };
   // eslint-disable-next-line no-undef
   getSocket().on(socketEvents.started, onGameStarted);
 }
 
 function subscribeToLeaderChosen() {
-  const onChosenLeader = ({ word }) =>
+  const onChosenLeader = ({ word }) => {
     updateNotifications(`You're the painter, your word is ${word}`);
+    enableCanvas();
+  };
   // eslint-disable-next-line no-undef
   getSocket().on(socketEvents.chosenLeader, onChosenLeader);
 }

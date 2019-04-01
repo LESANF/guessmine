@@ -3,6 +3,7 @@ const modeBtn = document.getElementById("paintMode");
 const canvas = document.getElementById("canvas");
 const context = canvas.getContext("2d");
 const colors = document.getElementsByClassName("color");
+const controls = document.getElementById("controls");
 
 const SELECTED_COLOR = "selectedColor";
 
@@ -108,12 +109,33 @@ Array.from(colors).forEach(color =>
 if (modeBtn) {
   modeBtn.addEventListener("click", onModeClick);
 }
-if (canvas) {
+
+export function restartCanvas() {
+  fillCanvas("#ffffff");
+}
+
+export function enableCanvas() {
   canvas.addEventListener("mousemove", onMouseMove, false);
   canvas.addEventListener("mousedown", startPainting, false);
   canvas.addEventListener("mouseup", stopPainting, false);
   canvas.addEventListener("mouseleave", stopPainting, false);
   canvas.addEventListener("click", onCanvasClick, false);
+  controls.style.opacity = 1;
+  restartCanvas();
+}
+
+export function disableCanvas() {
+  canvas.removeEventListener("mousemove", onMouseMove, false);
+  canvas.removeEventListener("mousedown", startPainting, false);
+  canvas.removeEventListener("mouseup", stopPainting, false);
+  canvas.removeEventListener("mouseleave", stopPainting, false);
+  canvas.removeEventListener("click", onCanvasClick, false);
+  controls.style.opacity = 0;
+  restartCanvas();
+}
+
+if (canvas) {
+  disableCanvas();
 }
 
 function subscribeToMoved() {
