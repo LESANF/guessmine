@@ -1,5 +1,6 @@
 import { getSocket } from "./sockets";
 import { enableCanvas, disableCanvas } from "./paint";
+import { lockChat } from "./chat";
 
 const gameNotifications = document.getElementById("gameNotifications");
 
@@ -37,6 +38,7 @@ function subscribeToLeaderChosen() {
   const onChosenLeader = ({ word }) => {
     updateNotifications(`You're the painter, your word is ${word}`);
     enableCanvas();
+    lockChat();
   };
   // eslint-disable-next-line no-undef
   getSocket().on(socketEvents.chosenLeader, onChosenLeader);

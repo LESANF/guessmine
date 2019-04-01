@@ -57,6 +57,14 @@ function subscribeToPong() {
   getSocket().on(socketEvents.pong, paintPlayers);
 }
 
+export function lockChat() {
+  sendMessage.style.display = "none";
+}
+
+export function unlockChat() {
+  sendMessage.style.display = "block";
+}
+
 if (sendMessage) {
   sendMessage.addEventListener("submit", onMessageSubmit);
 }
