@@ -15,7 +15,8 @@ const events = {
   pong: "aPong",
   starting: "starting",
   started: "started",
-  chosenLeader: "chosenLeader"
+  chosenLeader: "chosenLeader",
+  gameFinished: "gameFinished"
 };
 
 export default events;

@@ -55,6 +55,10 @@ const socketController = io => socket => {
   socket.on(events.ping, () => {
     socket.emit(events.pong, { sockets, inProgress });
   });
+  socket.on(events.gameFinished, () => {
+    io.emit(events.gameFinished);
+    setTimeout(() => startGame(), 3000);
+  });
 };
 
 export default socketController;

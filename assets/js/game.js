@@ -3,12 +3,37 @@ import { enableCanvas, disableCanvas } from "./paint";
 import { lockChat } from "./chat";
 
 const gameNotifications = document.getElementById("gameNotifications");
+const status = gameNotifications.querySelector(".status");
+const clock = gameNotifications.querySelector(".clock");
 
-const updateNotifications = text => {
-  if (gameNotifications) {
-    gameNotifications.innerText = text;
+let timeRemaining = 30;
+let clockInterval = null;
+
+function countBack() {
+  clock.innerText = `00:${
+    timeRemaining < 10 ? `0${timeRemaining}` : timeRemaining
+  }`;
+  timeRemaining--;
+}
+
+function startClock() {
+  if (clockInterval === null) {
+    timeRemaining = 30;
+    countBack();
+    clockInterval = setInterval(countBack, 1000);
   }
-};
+}
+
+function stopClock() {
+  clearInterval(clockInterval);
+  clockInterval = null;
+}
+
+function updateNotifications(text) {
+  if (gameNotifications) {
+    status.innerText = text;
+  }
+}
 
 function subscribeToGamePong() {
   const onGamePong = ({ inProgress }) =>
@@ -39,14 +64,31 @@ function subscribeToLeaderChosen() {
     updateNotifications(`You're the painter, your word is ${word}`);
     enableCanvas();
     lockChat();
+    startClock();
+    setTimeout(() => {
+      // eslint-disable-next-line no-undef
+      getSocket().emit(socketEvents.gameFinished);
+      disableCanvas();
+      stopClock();
+    }, 30000);
   };
   // eslint-disable-next-line no-undef
   getSocket().on(socketEvents.chosenLeader, onChosenLeader);
+}
+
+function subscribeToGameFinished() {
+  const onGameFinished = () => {
+    stopClock();
+    updateNotifications("Game is finished");
+  };
+  // eslint-disable-next-line no-undef
+  getSocket().on(socketEvents.gameFinished, onGameFinished);
 }
 
 export default {
   subscribeToGameStarting,
   subscribeToGameStarted,
   subscribeToGamePong,
-  subscribeToLeaderChosen
+  subscribeToLeaderChosen,
+  subscribeToGameFinished
 };

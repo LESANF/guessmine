@@ -22,6 +22,7 @@ const initSockets = () => {
   game.subscribeToGameStarted();
   game.subscribeToGamePong();
   game.subscribeToLeaderChosen();
+  game.subscribeToGameFinished();
 };
 
 export default {
