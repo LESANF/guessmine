@@ -11,6 +11,10 @@
   }
   .main {
     margin-right: 200px;
+    #gameNotifications {
+      font-size: 22px;
+      margin-bottom: 10px;
+    }
     #canvas {
       width: 700px;
       height: 700px;

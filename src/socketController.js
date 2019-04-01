@@ -47,6 +47,10 @@ const socketController = io => socket => {
 
   socket.on(events.sendMessage, ({ message }) => {
     if (message === word) {
+      io.emit(events.receiveMessage, {
+        message: `${socket.nickname} wins! Word was:${word}`,
+        nickname: "Bot"
+      });
       return registerWin();
     } else {
       return socket.broadcast.emit(events.receiveMessage, {

@@ -62,7 +62,7 @@ function subscribeToGameStarted() {
 
 function subscribeToLeaderChosen() {
   const onChosenLeader = ({ word }) => {
-    updateNotifications(`You're the painter, your word is ${word}`);
+    updateNotifications(`You're the painter, paint the word: ${word}`);
     enableCanvas();
     lockChat();
     startClock();
