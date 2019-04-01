@@ -1,12 +1,23 @@
 import events from "./events";
+import { getWord } from "./words";
 
 let sockets = [];
 let inProgress = false;
+let word, leader;
 
 const socketController = io => socket => {
+  const chooseLeader = () =>
+    sockets[Math.floor(Math.random() * sockets.length)];
+
   const startGame = () => {
-    inProgress = true;
+    // inProgress = true;
     io.emit(events.starting);
+    word = getWord();
+    leader = chooseLeader();
+    setTimeout(() => {
+      io.emit(events.started);
+      io.to(leader.id).emit(events.chosenLeader, { word });
+    }, 5000);
   };
 
   socket.on(events.login, ({ nickname }) => {
@@ -15,7 +26,7 @@ const socketController = io => socket => {
     socket.broadcast.emit(events.newUser, { nickname });
     socket.broadcast.emit(events.pong, { sockets });
     if (sockets.length > 1 && inProgress === false) {
-      console.log("will start game");
+      startGame();
     }
   });
 
@@ -42,7 +53,7 @@ const socketController = io => socket => {
     socket.broadcast.emit(events.filled, { color })
   );
   socket.on(events.ping, () => {
-    socket.emit(events.pong, { sockets });
+    socket.emit(events.pong, { sockets, inProgress });
   });
 };
 

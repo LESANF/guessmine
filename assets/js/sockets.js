@@ -1,6 +1,7 @@
 import paint from "./paint";
 import notifications from "./notifications";
 import chat from "./chat";
+import game from "./game";
 
 let socket = null;
 
@@ -17,6 +18,10 @@ const initSockets = () => {
   paint.subscribeToFilled();
   chat.subscribeToPong();
   chat.ping();
+  game.subscribeToGameStarting();
+  game.subscribeToGameStarted();
+  game.subscribeToGamePong();
+  game.subscribeToLeaderChosen();
 };
 
 export default {

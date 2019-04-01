@@ -4,14 +4,18 @@ const body = document.querySelector("body");
 
 const KIND_LEFT = "left";
 const KIND_JOINED = "joined";
+const KIND_STARTING = "starting";
 
-function fireNotification(content, kind) {
+export function fireNotification(content, kind) {
   const notification = document.createElement("div");
   notification.className = "notification";
   if (kind === KIND_JOINED) {
     notification.style.backgroundColor = "#5856d6";
   } else if (kind === KIND_LEFT) {
     notification.style.backgroundColor = "rgb(255, 204, 0)";
+  } else if (kind === KIND_STARTING) {
+    notification.style.right = 0;
+    notification.style.backgroundColor = "#2ecc71";
   }
   notification.innerText = content;
   body.append(notification);
